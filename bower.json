@@ -1,0 +1,11 @@
+{
+  "name": "base",
+  "version": "0.0.1",
+  "private": "true",
+  "dependencies": {
+    "foundation": "5.2.2",
+
+    "selectivizr": "*",
+    "respond": "*"
+  }
+}
