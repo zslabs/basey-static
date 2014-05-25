@@ -14,7 +14,6 @@ module.exports = function(grunt) {
 		sass: {
 			dist: {
 				options: {
-					style: "compressed",
 					loadPath: "bower_components/foundation/scss"
 				},
 				files: {
@@ -183,9 +182,21 @@ module.exports = function(grunt) {
 			}
 		},
 
+		imagemin: {
+			dist: {
+				files: [{
+					expand: true,
+					cwd: 'assets/media/',
+					src: ['**/*.{png,jpg,gif}'],
+					dest: 'assets/media/'
+				}]
+			}
+		},
+
 		watch: {
 			options: {
-				livereload: true
+				livereload: true,
+				spawn: false
 			},
 			grunt: {
 				options: {
@@ -193,13 +204,12 @@ module.exports = function(grunt) {
 				},
 				files: ['Gruntfile.js'],
 			},
-			markup: {
-				files: ["*.php"],
+			php: {
+				files: ["**/*.php"],
 			},
 			scss: {
 				options: {
-					livereload: false,
-					spawn: false
+					livereload: false
 				},
 				files: ["assets/css/src/*.scss"],
 				tasks: ["sass", "autoprefixer", "pixrem", "csso"]
@@ -209,11 +219,12 @@ module.exports = function(grunt) {
 				tasks: []
 			},
 			js: {
-				options: {
-					spawn: false
-				},
 				files: ["assets/js/src/*.js"],
-				tasks: ["jshint", "concat", "uglify"]
+				tasks: ["newer:jshint", "newer:concat", "newer:uglify"]
+			},
+			media: {
+				files: ["assets/media/**/*.{png,jpg,gif}"],
+				tasks: ["newer:imagemin"]
 			}
 		}
 
@@ -223,8 +234,8 @@ module.exports = function(grunt) {
 	require('jit-grunt')(grunt);
 
 	// Register Grunt Tasks
-	grunt.registerTask("default", ["sass", "autoprefixer", "pixrem", "csso", "copy", "modernizr", "concat", "jshint", "uglify"]);
+	grunt.registerTask("default", ["sass", "autoprefixer", "pixrem", "csso", "newer:copy", "newer:modernizr", "newer:concat", "newer:jshint", "newer:uglify"]);
 	grunt.registerTask("styles", ["sass", "autoprefixer", "pixrem", "csso"]);
-	grunt.registerTask("js", ["copy", "modernizr", "concat", "jshint", "uglify"]);
+	grunt.registerTask("js", ["newer:copy", "newer:modernizr", "newer:concat", "newer:jshint", "newer:uglify"]);
 
 };
