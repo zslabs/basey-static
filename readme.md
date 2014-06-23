@@ -1,18 +1,16 @@
 # Basey Static
 
-[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
-
-Basey is a developer-friendly static site boilerplate built with [Foundation](https://github.com/zurb/foundation).
+Basey is a developer-friendly static site boilerplate built with [UIkit](https://github.com/uikit/uikit) and [GulpJS](http://gulpjs.com).
 
 ## Customization: Getting Started
 
 * Make sure you have the following installed:
+    * [NodeJS](http://nodejs.org)
     * [Bower](http://bower.io)
-    * [Grunt](http://gruntjs.com/)
-    * [SASS](http://sass-lang.com/)
+    * [Gulp](http://gulpjs.com)
 * In your terminal, navigate to your site's directory and run the following:
     * `bower install`
     * `npm install`
-    * `grunt watch`
+    * `gulp watch`
 
 Enjoy!

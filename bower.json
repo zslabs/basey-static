@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "private": "true",
   "dependencies": {
-    "foundation": "5.2.3",
+    "uikit": "2.7.*",
+
+    "fastclick": "1.*",
 
     "selectivizr": "*",
     "respond": "*"

@@ -54,7 +54,7 @@ function basey_body_class() {
 	</head>
 	<body class="<?php echo basey_body_class(); ?>">
 
-		<h2 class="text-center">Let's do this!</h2>
+		<h2 class="uk-text-center">Let's do this!</h2>
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="<?php echo basey_asset_helper('/assets/js/build/vendor/jquery.min.js'); ?>"><\/script>')</script>
