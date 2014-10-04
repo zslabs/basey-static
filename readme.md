@@ -10,7 +10,12 @@ Basey is a developer-friendly static site boilerplate built with [UIkit](https:/
     * [Gulp](http://gulpjs.com)
 * In your terminal, navigate to your site's directory and run the following:
     * `bower install`
+    	* Installs necessary frontend assets
     * `npm install`
-    * `gulp watch`
+    	* Installs Gulp and Gulp plugins for compiling assets
+    * `gulp`
+   		* Builds initial project and watches for changes
+
+This project uses [BrowserSync](http://www.browsersync.io/) to automatically watch, compile, reload, etc. Change the proxy variable in the gulpfile to match your environment before starting.
 
 Enjoy!

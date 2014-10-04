@@ -1,69 +1,99 @@
 // Load plugins
-var gulp = require('gulp'),
-    Combine = require('stream-combiner'),
-    path = require('path'),
-    jshint = require('gulp-jshint'),
-    imagemin = require('gulp-imagemin'),
-    csso = require('gulp-csso'),
-    less = require('gulp-less'),
-    autoprefixer = require('gulp-autoprefixer'),
-    uglify = require('gulp-uglify'),
-    notify = require('gulp-notify'),
-    newer = require('gulp-newer'),
-    size = require('gulp-size'),
-    concat = require('gulp-concat'),
-    rename = require('gulp-rename'),
-    filesize = require('gulp-size'),
-    livereload = require('gulp-livereload'),
-    duration = require('gulp-duration'),
-    pixrem = require('gulp-pixrem');
+var gulp         = require("gulp"),
+    imagemin     = require("gulp-imagemin"),
+    csso         = require("gulp-csso"),
+    less         = require("gulp-less"),
+    autoprefixer = require("gulp-autoprefixer"),
+    uglify       = require("gulp-uglify"),
+    notify       = require("gulp-notify"),
+    jshint       = require("gulp-jshint"),
+    changed      = require("gulp-changed"),
+    concat       = require("gulp-concat"),
+    filesize     = require("gulp-size"),
+    duration     = require("gulp-duration"),
+    pixrem       = require("gulp-pixrem"),
+    sourcemaps   = require("gulp-sourcemaps"),
+    browserSync  = require("browser-sync"),
+    plumber      = require("gulp-plumber"),
+    merge        = require("merge-stream"),
+    filter       = require("gulp-filter");
+
+var reload = browserSync.reload,
+    paths =  {
+      "scripts": {
+        "src": "assets/js/src/**/*.js",
+        "build": "assets/js/build/",
+        "vendor": "!assets/js/src/vendor/**/*.js"
+      },
+      "styles": {
+        "src": "assets/css/src/**/*.less",
+        "build": "assets/css/build/"
+      },
+      "media": {
+        "src": "assets/media/src/*",
+        "build": "assets/media/build/"
+      },
+      "fonts": {
+        "build": "assets/fonts/"
+      }
+    };
+
+// BrowserSync
+gulp.task("reload", function() {
+  browserSync({
+    proxy: "basey.dev",
+    xip: true
+  });
+});
 
 // JS Hint
-gulp.task('jshint', function() {
-  gulp.src('assets/js/src/*.js')
+gulp.task("jshint", function() {
+  gulp.src([paths.scripts.src, paths.scripts.vendor])
     .pipe(jshint({
-      'boss': true,
-      'sub': true,
-      'evil': true,
-      'browser': true,
-      'globals': {
-        'module': false,
-        'require': true
+      "boss": true,
+      "sub": true,
+      "evil": true,
+      "browser": true,
+      "multistr": true,
+      "globals": {
+        "module": false,
+        "require": true
       }
     }))
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(duration('hinting files'))
-    .pipe(notify({ message: 'JS Hint task complete' }));
+    .pipe(jshint.reporter("jshint-stylish"))
+    .pipe(duration("hinting files"))
+    .pipe(notify({ message: "JS Hint task complete" }));
 });
 
 // Copy
-gulp.task('copy', function() {
+gulp.task("copy", function() {
   // UIkit fonts
-  gulp.src('bower_components/uikit/dist/fonts/*')
-    .pipe(gulp.dest('assets/fonts/'));
+  return gulp.src("bower_components/uikit/dist/fonts/*")
+    .pipe(changed(paths.fonts.build))
+    .pipe(gulp.dest(paths.fonts.build));
 });
 
 // Scripts
-gulp.task('scripts', function() {
-  var jsBuildDir = 'assets/js/build/';
+gulp.task("scripts", function() {
 
   // IE
-  gulp.src([
-      'bower_components/selectivizr/selectivizr.js',
-      'bower_components/respond/dest/respond.min.js',
-      'assets/js/src/vendor/ecmascript-polyfill.js',
-      'assets/js/src/vendor/forEach-polyfill.js',
+  var ie = gulp.src([
+      "bower_components/selectivizr/selectivizr.js",
+      "bower_components/respond/dest/respond.min.js",
+      "assets/js/src/vendor/ecmascript-polyfill.js",
+      "assets/js/src/vendor/forEach-polyfill.js",
     ])
-    .pipe(concat('ie.min.js'))
+    .pipe(changed(paths.scripts.build))
+    .pipe(concat("ie.min.js"))
     .pipe(uglify())
     .pipe(filesize({
-      title: 'IE Scripts:'
+      title: "IE Scripts:"
     }))
-    .pipe(gulp.dest(jsBuildDir))
-    .pipe(notify({ message: 'IE scripts task complete' }));
+    .pipe(gulp.dest(paths.scripts.build))
+    .pipe(notify({ message: "IE scripts task complete" }));
 
   // Main
-  gulp.src([
+  var main = gulp.src([
       // UI Kit
       "bower_components/uikit/src/js/core.js",
       "bower_components/uikit/src/js/component.js",
@@ -105,79 +135,70 @@ gulp.task('scripts', function() {
       "bower_components/parsleyjs/dist/parsley.js",
 
       // Project
-      'assets/js/src/_init.js'
+      "assets/js/src/_init.js"
     ])
-    .pipe(concat('scripts.min.js'))
-    .pipe(uglify())
+    .pipe(changed(paths.scripts.build))
+    .pipe(sourcemaps.init())
+      .pipe(concat("scripts.min.js"))
+      .pipe(uglify())
+    .pipe(sourcemaps.write("../sourcemaps"))
+    .pipe(filter('**/*.js')) // Filter only JS files for filesize/dest
     .pipe(filesize({
-      title: 'Main Scripts:'
+      title: "Main Scripts:"
     }))
-    .pipe(gulp.dest(jsBuildDir))
-    .pipe(duration('building main JS files'))
-    .pipe(notify({ message: 'Main scripts task complete' }));
+    .pipe(gulp.dest(paths.scripts.build))
+    .pipe(duration("building main JS files"))
+    .pipe(notify({ message: "Main scripts task complete" }));
+
+    return merge(ie, main);
 });
 
 // Styles
-gulp.task('styles', function() {
-  var combined = Combine(
-      gulp.src('assets/css/src/app.less'),
-      less(),
-      autoprefixer('last 2 version', 'ie 9'),
-      csso(),
-      pixrem('14px', {
+gulp.task("styles", function() {
+  return gulp.src("assets/css/src/app.less")
+    .pipe(changed(paths.styles.build))
+    .pipe(plumber())
+      .pipe(less())
+      .pipe(autoprefixer({
+        browsers: ["last 2 versions", "ie 9"]
+      }))
+      .pipe(csso())
+      .pipe(pixrem("14px", {
         replace: true
-      }),
-      filesize({
-        title: 'Styles:'
-      }),
-      gulp.dest('assets/css/build/'),
-      duration('building styles'),
-      notify({ message: 'Styles task complete' })
-    );
-
-    combined.on('error', function(err) {
-      console.warn(err.message);
-    });
-
-    return combined;
+      }))
+    .pipe(plumber.stop())
+    .pipe(filesize({
+      title: "Styles:"
+    }))
+    .pipe(gulp.dest(paths.styles.build))
+    .pipe(duration("building styles"))
+    .pipe(notify({ message: "Styles task complete" }))
+    .pipe(reload({
+      stream:true
+    }));
 });
 
 // Media
-gulp.task('media', function() {
-	var mediaDir = 'assets/media/';
+gulp.task("media", function() {
 
-  gulp.src(mediaDir + '**/*')
-    .pipe(newer(mediaDir))
+  return gulp.src(paths.media.src)
+    .pipe(changed(paths.media.build))
     .pipe(imagemin())
     .pipe(filesize({
-      title: 'Media File:'
+      title: "Media File:"
     }))
-    .pipe(gulp.dest(mediaDir))
-    .pipe(duration('compressing media'))
-    .pipe(notify({ message: 'Media task complete' }));
+    .pipe(gulp.dest(paths.media.build))
+    .pipe(duration("compressing media"))
+    .pipe(notify({ message: "Media task complete" }));
 });
 
 // Default task
-gulp.task('default', ['copy', 'styles', 'jshint', 'scripts', 'media']);
+gulp.task("default", ["copy", "styles", "jshint", "scripts", "media", "watch"]);
 
 // Watch
-gulp.task('watch', function() {
-
-  // Sass
-  gulp.watch('assets/css/src/**/*.less', ['styles']);
-
-  // JS
-  gulp.watch('assets/js/src/**/*.js', ['jshint', 'scripts']);
-
-  // Media
-  gulp.watch('assets/media/**/*', ['media']);
-
-  // Create LiveReload server
-  var server = livereload();
-
-  // Watch files in patterns below, reload on change
-  gulp.watch(['assets/css/build/*', 'assets/js/build/*', '*.php']).on('change', function(file) {
-    server.changed(file.path);
-  });
-
+gulp.task("watch", ["reload"], function () {
+  gulp.watch(paths.scripts.src, ["jshint", "scripts", browserSync.reload]);
+  gulp.watch(paths.styles.src, ["styles"]);
+  gulp.watch(paths.media.src, ["media"]);
+  gulp.watch("*.php", ["", browserSync.reload]);
 });
