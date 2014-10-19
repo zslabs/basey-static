@@ -2,7 +2,7 @@
   "use strict"
 
   # SVG Icons
-  templatePath = '/assets/svg/build/sprite.svg'
+  svgSpritePath = '/assets/svg/build/sprite.svg'
 
   $.each $("[data-bt-icon]"), (index, element) ->
     $this = $(element)
@@ -14,7 +14,7 @@
     use.setAttributeNS(
       'http://www.w3.org/1999/xlink',
       'href',
-      templatePath + '#' + $this.data 'btIcon'
+      svgSpritePath + '#' + $this.data 'btIcon'
     )
 
     svg.appendChild use
