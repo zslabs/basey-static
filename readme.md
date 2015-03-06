@@ -8,6 +8,7 @@ Basey is a developer-friendly static site boilerplate built with [UIkit](https:/
     * [NodeJS](http://nodejs.org)
     * [Bower](http://bower.io)
     * [Gulp](http://gulpjs.com)
+* Have a vhost setup for `basey.dev`. You can change this to your liking in `gulpfile.coffee`; needed for BrowserSync
 * In your terminal, navigate to your site's directory and run the following:
     * `bower install`
     	* Installs necessary frontend assets

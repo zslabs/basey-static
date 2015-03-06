@@ -47,16 +47,12 @@ function basey_body_class() {
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Basey Static</title>
 		<link rel="stylesheet" href="<?php echo basey_asset_helper('/assets/css/build/app.css'); ?>">
-		<script src="<?php echo basey_asset_helper('/assets/js/build/vendor/modernizr.js'); ?>"></script>
-		<!--[if lte IE 8]>
-			<script src="<?php echo basey_asset_helper('/assets/js/build/ie.min.js'); ?>"></script>
-		<![endif]-->
 	</head>
 	<body class="<?php echo basey_body_class(); ?>">
 
 		<h2 class="uk-text-center">Let's do this!</h2>
 
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="<?php echo basey_asset_helper('/assets/js/build/vendor/jquery.min.js'); ?>"><\/script>')</script>
 		<script src="<?php echo basey_asset_helper('/assets/js/build/dep.min.js'); ?>"></script>
 		<script src="<?php echo basey_asset_helper('/assets/js/build/app.min.js'); ?>"></script>
