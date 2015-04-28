@@ -29,8 +29,5 @@
   # Placeholder
   $('[placeholder]').placeholder()
 
-  # FastClick
-  FastClick.attach document.body
-
   return
 ) jQuery

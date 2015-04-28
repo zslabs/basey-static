@@ -73,7 +73,10 @@ gulp.task "dep", ->
     "bower_components/uikit/src/js/components/nestable.js"
     "bower_components/uikit/src/js/components/notify.js"
     "bower_components/uikit/src/js/components/pagination.js"
+    "bower_components/uikit/src/js/components/parallax.js"
     "bower_components/uikit/src/js/components/search.js"
+    "bower_components/uikit/src/js/components/slider.js"
+    "bower_components/uikit/src/js/components/slideset.js"
     "bower_components/uikit/src/js/components/slideshow.js"
     "bower_components/uikit/src/js/components/slideshow-fx.js"
     "bower_components/uikit/src/js/components/sortable.js"
@@ -84,7 +87,6 @@ gulp.task "dep", ->
 
     # Vendor
     "bower_components/svg4everybody/svg4everybody.js"
-    "bower_components/fastclick/lib/fastclick.js"
     "bower_components/jquery-placeholder/jquery.placeholder.min.js"
   ])
   .pipe($.changed(paths.scripts.build))
