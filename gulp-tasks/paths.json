@@ -1,8 +1,5 @@
 {
-  "fonts": {
-    "src": "assets/fonts/src/*",
-    "build": "assets/fonts/build/"
-  },
+  "fonts": "assets/fonts/",
   "scripts": {
     "src": "assets/js/src/**/*.js",
     "build": "assets/js/build/"
