@@ -1,4 +1,4 @@
-module.exports = function(gulp, $, browserSync, reload, merge, paths, files, isProd) {
+module.exports = function(gulp, $, browserSync, reload, merge, paths, files) {
   return function() {
     gulp.src(paths.media.src)
     .pipe($.changed(paths.media.build))
