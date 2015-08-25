@@ -1,10 +1,10 @@
 {
   "name": "basey",
-  "version": "0.0.1",
+  "version": "5.0.0",
   "private": "true",
   "dependencies": {
-    "uikit": "uikit/uikit#2.20.3",
+    "uikit": "uikit/uikit#2.22.0",
     "jquery-placeholder": "2.*",
-    "svg4everybody": "*"
+    "boomsvgloader": "0.0.2"
   }
 }
