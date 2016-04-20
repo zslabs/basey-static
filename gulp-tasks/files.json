@@ -10,6 +10,7 @@
     "node_modules/uikit/src/js/core/button.js",
     "node_modules/uikit/src/js/core/dropdown.js",
     "node_modules/uikit/src/js/core/grid.js",
+    "node_modules/uikit/src/js/core/grid-parallax.js",
     "node_modules/uikit/src/js/core/modal.js",
     "node_modules/uikit/src/js/core/offcanvas.js",
     "node_modules/uikit/src/js/core/nav.js",
