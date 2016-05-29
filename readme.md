@@ -16,3 +16,7 @@ Basey is a developer-friendly static site boilerplate built with [UIkit](https:/
      * Watches for project changes and starts BrowserSync instance
 
 Enjoy!
+
+# Copyright and License
+
+Copyright [Zachary Schnackel](http://zslabs.com) under the [MIT license](LICENSE.md).
